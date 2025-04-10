@@ -107,7 +107,7 @@ class PlacesController extends Controller
     }
 
     public function export(Request $request){
-        return Excel::download(new PlaceExports, 'places.xlsx');
+        return Excel::download(new PlaceExports, 'places-'.Date('d-m-Y-H:i:s').'.xlsx');
     }
 
     public function reset_places(Request $request){
