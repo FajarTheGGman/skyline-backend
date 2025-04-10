@@ -15,9 +15,10 @@ use App\Http\Controllers\Api\PlacesController;
 |
 */
 
-Route::post('/places/show', [PlacesController::class, 'show']);
+Route::get('/places/show', [PlacesController::class, 'show']);
 Route::post('/places/create', [PlacesController::class, 'create']);
 Route::get('/places/export', [PlacesController::class, 'export']);
+Route::get('/places/reset', [PlacesController::class, 'reset_places']);
 Route::post('/places/search', [PlacesController::class, 'search']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

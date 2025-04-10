@@ -109,4 +109,17 @@ class PlacesController extends Controller
     public function export(Request $request){
         return Excel::download(new PlaceExports, 'places.xlsx');
     }
+
+    public function reset_places(Request $request){
+        try{
+            PlacesModels::truncate();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Successfully reset all places'
+            ]);
+        }catch(\Exception $e){
+            return $e;
+        }
+    }
 }
