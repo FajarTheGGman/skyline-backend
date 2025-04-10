@@ -1,0 +1,13 @@
+CREATE USER 'admin'@'a%' IDENTIFIED BY 'admin';
+GRANT CREATE USER ON *.* TO 'admin'@'a%';
+GRANT EVENT ON *.* TO 'admin'@'a%';
+GRANT FILE ON *.* TO 'admin'@'a%';
+GRANT PROCESS ON *.* TO 'admin'@'a%';
+GRANT RELOAD ON *.* TO 'admin'@'a%';
+GRANT REPLICATION SLAVE ON *.* TO 'admin'@'a%';
+GRANT SHOW DATABASES ON *.* TO 'admin'@'a%';
+GRANT SHUTDOWN ON *.* TO 'admin'@'a%';
+GRANT SUPER ON *.* TO 'admin'@'a%';
+GRANT CREATE TABLESPACE ON *.* TO 'admin'@'a%';
+GRANT USAGE ON *.* TO 'admin'@'a%';
+GRANT GRANT OPTION ON *.* TO 'admin'@'a%';

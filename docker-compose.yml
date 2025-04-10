@@ -1,0 +1,87 @@
+version: '3'
+
+services:
+  
+  # PHP Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: skyline-backend
+    container_name: skyline-backend
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./php/php-custom.ini:/usr/local/etc/php/php.ini
+    networks:
+      - app-network
+
+  # Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: webserver-skyline
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8004:80"
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+
+  # MariaDB Service
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb-skyline
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3309:3306"
+    env_file:
+      - ./.env  # Path to your Laravel app's .env file
+    environment:
+        MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+        MYSQL_ROOT_HOST: '%'
+        MYSQL_DATABASE: ${DB_DATABASE}
+        MYSQL_USER: ${DB_USERNAME}
+        MYSQL_PASSWORD: ${DB_PASSWORD}
+        MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    volumes:
+      - dbdata:/var/lib/mysql/
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+
+  # PHPMyAdmin Service
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-skyline
+    restart: unless-stopped
+    ports:
+      - "8092:80"  # You can access PHPMyAdmin via http://localhost:8080
+    environment:
+      PMA_HOST: 'mariadb-skyline'  # This should match the name of your MariaDB service
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}  # Use the same root password as in the MariaDB service
+      UPLOAD_LIMIT: 10G
+    depends_on:
+      - mariadb
+    networks:
+      - app-network
+ 
+# Docker Networks
+networks:
+  app-network:
+    driver: bridge
+
+# Volumes
+volumes:
+  dbdata:
+    driver: local
