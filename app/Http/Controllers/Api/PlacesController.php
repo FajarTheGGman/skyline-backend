@@ -14,7 +14,7 @@ class PlacesController extends Controller
 {
     public function show(Request $request){
         try{
-            $get = PlacesModels::all();
+            $get = PlacesModels::orderBy('id', 'desc')->get();
 
             return response()->json([
                 'status' => 200,
@@ -84,15 +84,16 @@ class PlacesController extends Controller
                 
             } while ($nextPageToken);
 
+
             foreach( $allResults as $res ){
                 PlacesModels::firstOrCreate([
-                    'name' => $res['name'],
-                    'address' => $res['formatted_address'],
-                    'long' => $res['geometry']['location']['lng'],
-                    'lat' => $res['geometry']['location']['lat'],
-                    'type' => $res['types'][0],
-                    'rating' => $res['rating'],    
-                    'vicinity' => $res['formatted_address'],
+                    'name' => $res['name'] ?? null,
+                    'address' => $res['formatted_address'] ?? null,
+                    'long' => $res['geometry']['location']['lng'] ?? null,
+                    'lat' => $res['geometry']['location']['lat'] ?? null,
+                    'type' => $request->type,
+                    'rating' => $res['rating'] ?? null,    
+                    'vicinity' => $res['formatted_address'] ?? null,
                 ]);
             }
             
