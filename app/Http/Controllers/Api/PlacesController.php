@@ -94,6 +94,7 @@ class PlacesController extends Controller
                     'type' => $request->type,
                     'rating' => $res['rating'] ?? null,    
                     'vicinity' => $res['formatted_address'] ?? null,
+                    'location' => $request->location,
                 ]);
             }
             
