@@ -21,6 +21,8 @@ class PlacesModels extends Model
         'rating',
         'vicinity',
         'photo',
-        'location'
+        'location',
+        'elevation',
+        'resolution',
     ];
 }
